@@ -1,4 +1,4 @@
-# Clip Cabinet
+# Screen Parcel
 
 Record a short screen walkthrough, preview it, download it, and optionally share it from your own server. An open-source, single-owner alternative to **Loom** for the recording-and-link workflow. MIT licensed; no third-party analytics or video storage. This is a local candidate, not a publicly released service.
 

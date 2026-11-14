@@ -1,4 +1,4 @@
-# Clip Cabinet — owner-controlled launch handoff
+# Screen Parcel — owner-controlled launch handoff
 
 Prepared local candidate, not released. Open-source alternative to Loom for browser screen recording, local playback/download and single-owner, self-hosted revocable video links. MIT licensed. No camera overlay, editing, transcription, comments, teams or system-audio capture.
 
@@ -48,7 +48,7 @@ Record browser/OS, the picker choice, whether video and microphone passed, and a
 
 ## Launch form and exact next action
 
-[Prefilled Clip Cabinet repository form](https://github.com/new?name=clip-cabinet&description=Open-source%20alternative%20to%20Loom%20for%20browser%20screen%20recording%20and%20self-hosted%20video%20sharing.%20Record%2C%20preview%2C%20download%2C%20and%20share%20with%20revocable%20links.%20MIT%20licensed.&visibility=public)
+[Prefilled Screen Parcel repository form](https://github.com/new?name=clip-cabinet&description=Open-source%20alternative%20to%20Loom%20for%20browser%20screen%20recording%20and%20self-hosted%20video%20sharing.%20Record%2C%20preview%2C%20download%2C%20and%20share%20with%20revocable%20links.%20MIT%20licensed.&visibility=public)
 
 Owner: anshuman-pandey. Public repository named clip-cabinet. Leave README/license/gitignore initialization unchecked; the package includes them.
 
