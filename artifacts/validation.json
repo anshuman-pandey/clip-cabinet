@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-11-14T15:00:31.840039+00:00",
+  "checked_at": "2026-11-14T15:37:41.305730+00:00",
   "status": "local candidate, not released",
   "server_tests": 7,
   "browser_checks": [
@@ -17,8 +17,21 @@
     "real screen picker",
     "microphone hardware",
     "hosted HTTPS",
-    "Docker run",
     "public repository and distribution"
   ],
-  "naming_check": "GitHub repository search for quoted clip-cabinet returned no results on 2026-11-14; not comprehensive name clearance"
+  "naming_check": "GitHub repository search for quoted clip-cabinet returned no results on 2026-11-14; not comprehensive name clearance",
+  "container_checks": [
+    "built using optional trusted CA secret, TLS validation enabled",
+    "UID 10001",
+    "owner authentication",
+    "multipart upload",
+    "byte-range media response",
+    "recording persists across restart",
+    "revoked link stays unavailable across restart",
+    "stopped-volume backup and restore",
+    "restored database writable",
+    "real MediaRecorder browser suite against container with existing library entries"
+  ],
+  "container_image_tested": "sha256:7f15947eecf0ce09ccb71445c8db4c51ba89e3002f57b4d7f90cb36b7bdacb9c",
+  "remote_ci": "not run; repository not published"
 }

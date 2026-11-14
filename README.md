@@ -41,6 +41,14 @@ docker run --rm -p 127.0.0.1:5120:5120 -e OWNER_TOKEN \
   -v clip-cabinet-data:/app/data clip-cabinet
 ```
 
+If your network uses a private certificate authority, supply its trusted CA bundle for the build without disabling certificate checks:
+
+```sh
+docker build --secret id=pip_ca,src=/path/to/trusted-ca-bundle.pem -t clip-cabinet .
+```
+
+The CA secret is available only to the dependency-install build step and is not copied into the final image. Normal networks need no secret.
+
 The container runs as UID 10001. Bind mounts must be writable by that UID. Configure the reverse proxy to accept 101 MB bodies and a sufficient upload timeout, preserve Range requests, and avoid logging bearer link paths. Do not cache viewer pages or media. No forwarded host is used to generate absolute links: the browser uses the current origin. Keep the app on one host with local persistent SQLite/file storage. Back up the whole data directory while the app is stopped; restore it together. A crash can leave an orphan upload/file consuming disk; review files absent from the database before removing them. Monitor available disk space.
 
 Shared links are unlisted bearer links, **not authenticated viewer access**. Anyone holding one can watch and download. Revocation cannot stop an already-open transfer or recall downloaded copies. File signatures are checked for supported containers; this is not a malware scanner or full media validator. Upload access belongs only to the trusted owner. Set rate limits at your proxy for internet deployment.
@@ -60,7 +68,16 @@ npx playwright install chromium
 OWNER_TOKEN="$OWNER_TOKEN" npm test
 ```
 
-`TEST_URL` overrides localhost; `CHROMIUM_PATH` selects an installed browser. The browser test supplies synthetic screen frames, then uses real MediaRecorder and checks playback, download, upload, anonymous viewer playback, revocation, file import, missing owner key and permission-denial recovery. It creates and deletes a recording on the target server. Seven server tests verify auth, escaped titles, byte ranges, quota concurrency, upload limits, persistence and deletion. Real browser picker, microphone hardware and hosted HTTPS acceptance remain release gates. See `artifacts/validation.json`.
+`TEST_URL` overrides localhost; `CHROMIUM_PATH` selects an installed browser. The browser test supplies synthetic screen frames, then uses real MediaRecorder and checks playback, download, upload, anonymous viewer playback, revocation, file import, missing owner key and permission-denial recovery. It creates and deletes a recording on the target server. Seven server tests verify auth, escaped titles, byte ranges, quota concurrency, upload limits, persistence and deletion. Container acceptance is also reproducible:
+
+```sh
+docker build -t clip-cabinet:acceptance .
+CLIP_TEST_BROWSER=1 python3 scripts/docker_acceptance.py
+```
+
+This creates isolated temporary containers and named volumes, checks non-root UID, auth, upload, byte ranges, restart persistence, revocation, stopped-volume backup/restore and post-restore writes, then runs browser acceptance against the container. It removes only its own test containers/volumes afterward. Container storage checks use a synthetic container-header fixture; real playable video is exercised by the browser suite. The CI workflow runs both suites. Remote CI has not run yet.
+
+Real browser picker, microphone hardware and hosted HTTPS acceptance remain release gates. See `artifacts/validation.json`.
 
 ## Distribution
 

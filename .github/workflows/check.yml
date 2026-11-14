@@ -17,16 +17,8 @@ jobs:
           node-version: '22'
       - run: npm ci
       - run: npx playwright install --with-deps chromium
-      - name: Browser acceptance with synthetic screen
+      - run: docker build -t clip-cabinet:acceptance .
+      - name: Container persistence and browser acceptance
         env:
-          OWNER_TOKEN: ci-only-token-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-          DATA_DIR: /tmp/clip-cabinet-ci
-        run: |
-          python app.py &
-          server_pid=$!
-          trap 'kill "$server_pid"' EXIT
-          for attempt in $(seq 1 30); do
-            if curl -fsS http://127.0.0.1:5120/health; then break; fi
-            sleep 1
-          done
-          npm test
+          CLIP_TEST_BROWSER: '1'
+        run: python3 scripts/docker_acceptance.py
