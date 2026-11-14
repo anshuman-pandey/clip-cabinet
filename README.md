@@ -1,6 +1,6 @@
 <div align="center">
 
-![Clip Cabinet — show it once, keep the file, share on your terms](docs/assets/banner.svg)
+![Screen Parcel — show it once, keep the file, share on your terms](docs/assets/banner.svg)
 
 ### Open-source alternative to Loom for screen recording and self-hosted sharing
 
@@ -14,7 +14,7 @@ Record a walkthrough. Keep a local copy. Share a link you can revoke.
 
 > **Prepared preview, not a launched service.** The local recording and sharing workflow passes automated acceptance with synthetic video. Real screen-picker interaction, microphone hardware and hosted HTTPS still need manual verification. There is no live public demo yet.
 
-![Clip Cabinet recording workspace with preview, local download and revocable sharing controls](docs/assets/studio.png)
+![Screen Parcel recording workspace with preview, local download and revocable sharing controls](docs/assets/studio.png)
 
 *Actual application screenshot from container acceptance. The video is a clearly labeled synthetic test recording, not customer footage.*
 
@@ -65,13 +65,13 @@ The named volume retains your library. The container runs as UID 10001. See the 
 
 Recipients see a title, playback controls and a download. They do not need your owner key. Viewer links are unlisted bearer links, not authenticated team access.
 
-![Clip Cabinet viewer with video playback and download](docs/assets/viewer.png)
+![Screen Parcel viewer with video playback and download](docs/assets/viewer.png)
 
 [View the mobile layout](docs/assets/mobile.png) · [Read the recording and storage limits](docs/operations.md#run-locally)
 
 ## What this replaces—and what it doesn't
 
-Clip Cabinet targets Loom's **record → preview → share a link** workflow. It is a smaller, self-hosted tool, with no claim of feature parity or affiliation.
+Screen Parcel targets Loom's **record → preview → share a link** workflow. It is a smaller, self-hosted tool, with no claim of feature parity or affiliation.
 
 | Included | Not included |
 |---|---|
