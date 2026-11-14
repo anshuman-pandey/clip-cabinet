@@ -1,10 +1,34 @@
-# Clip Cabinet
+<div align="center">
 
-Record a short screen walkthrough, preview it, download it, and optionally share it from your own server. An open-source, single-owner alternative to **Loom** for the recording-and-link workflow. MIT licensed; no third-party analytics or video storage. This is a local candidate, not a publicly released service.
+![Clip Cabinet — show it once, keep the file, share on your terms](docs/assets/banner.svg)
 
-## Run locally
+### Open-source alternative to Loom for screen recording and self-hosted sharing
 
-Python 3.12+:
+Record a walkthrough. Keep a local copy. Share a link you can revoke.
+
+**MIT licensed** · **Single owner** · **Python or Docker** · **No third-party video storage**
+
+[**Run locally →**](#run-it-on-your-computer) · [See the workflow](#record-preview-share-revoke) · [Self-hosting guide](docs/operations.md#self-host) · [Launch checklist](HANDOFF.md)
+
+</div>
+
+> **Prepared preview, not a launched service.** The local recording and sharing workflow passes automated acceptance with synthetic video. Real screen-picker interaction, microphone hardware and hosted HTTPS still need manual verification. There is no live public demo yet.
+
+![Clip Cabinet recording workspace with preview, local download and revocable sharing controls](docs/assets/studio.png)
+
+*Actual application screenshot from container acceptance. The video is a clearly labeled synthetic test recording, not customer footage.*
+
+## Record. Preview. Share. Revoke.
+
+| 1 · Record | 2 · Keep a copy | 3 · Share deliberately | 4 · Control future access |
+|---|---|---|---|
+| Choose a screen, window or tab. Optional microphone narration. | Preview the result and download the file. | Enter your owner key and upload to your own server. | Revoke the viewer link and delete the hosted recording. |
+
+Nothing uploads when you press Record. You choose whether to keep a local file or create a hosted link. Anyone with a shared link can watch and download it; revoking a link cannot recall a downloaded copy.
+
+## Run it on your computer
+
+You need **Python 3.12+**. Extract the source package, then run these commands from its folder:
 
 ```sh
 python3 -m venv .venv
@@ -15,24 +39,16 @@ export DATA_DIR=./data
 python app.py
 ```
 
-Open http://127.0.0.1:5120. Use the generated `OWNER_TOKEN` in the owner-key field when uploading or managing links. Keep that token private; it grants full library access. Restart with the same environment configuration to retain owner access. A different token rotates access without changing existing viewer links.
+Open **http://127.0.0.1:5120**. Select **Choose screen & record**, choose non-private test content in the browser picker, then stop and preview. You can download without an owner key. Uploading or managing the library requires the `OWNER_TOKEN` generated in your terminal; retain it privately for subsequent launches.
 
-1. Choose screen & record; select a screen, window or tab in the browser picker. Microphone narration is optional and asks for separate permission.
-2. Stop, preview the recording and download a copy. Nothing uploads automatically.
-3. Add a title and owner key, then Upload & create link.
-4. Open the link in another browser. Use Revoke & delete in the library to remove the hosted file and stop future access.
+These commands are for macOS/Linux shells. The [launch handoff](HANDOFF.md) covers key handling, prerequisites and exact acceptance steps. This is a server-backed app, not a double-click HTML file. Native Windows launcher and one-click setup are not included yet.
 
-A browser-supported WebM or MP4 file can also be imported. Capture automatically stops at five minutes or approximately 100 MB; the final chunk may take it over the upload limit, in which case a local download remains available. Uploads are capped at 100 MB and the hosted library at 1 GB. Browser memory holds the current recording; refreshing loses unsaved work.
+**Already have a recording?** Import a browser-supported WebM or MP4 and exercise preview → upload → viewer → revoke. The browser suite also creates a playable synthetic recording to verify the complete flow without screen permissions.
 
-## Self-host
+<details>
+<summary><strong>Prefer Docker?</strong></summary>
 
-Run behind an HTTPS reverse proxy. Screen capture works on localhost for development; remote recording requires HTTPS. Example application command:
-
-```sh
-gunicorn --bind 0.0.0.0:5120 --workers 2 --threads 4 --timeout 120 'app:create_app()'
-```
-
-Docker:
+With Docker installed and `OWNER_TOKEN` set in your shell:
 
 ```sh
 docker build -t clip-cabinet .
@@ -41,48 +57,55 @@ docker run --rm -p 127.0.0.1:5120:5120 -e OWNER_TOKEN \
   -v clip-cabinet-data:/app/data clip-cabinet
 ```
 
-If your network uses a private certificate authority, supply its trusted CA bundle for the build without disabling certificate checks:
+The named volume retains your library. The container runs as UID 10001. See the [operations guide](docs/operations.md#self-host) for HTTPS, upload limits, backup, restore and trusted-CA builds.
 
-```sh
-docker build --secret id=pip_ca,src=/path/to/trusted-ca-bundle.pem -t clip-cabinet .
-```
+</details>
 
-The CA secret is available only to the dependency-install build step and is not copied into the final image. Normal networks need no secret.
+## A viewer focused on the recording
 
-The container runs as UID 10001. Bind mounts must be writable by that UID. Configure the reverse proxy to accept 101 MB bodies and a sufficient upload timeout, preserve Range requests, and avoid logging bearer link paths. Do not cache viewer pages or media. No forwarded host is used to generate absolute links: the browser uses the current origin. Keep the app on one host with local persistent SQLite/file storage. Back up the whole data directory while the app is stopped; restore it together. A crash can leave an orphan upload/file consuming disk; review files absent from the database before removing them. Monitor available disk space.
+Recipients see a title, playback controls and a download. They do not need your owner key. Viewer links are unlisted bearer links, not authenticated team access.
 
-Shared links are unlisted bearer links, **not authenticated viewer access**. Anyone holding one can watch and download. Revocation cannot stop an already-open transfer or recall downloaded copies. File signatures are checked for supported containers; this is not a malware scanner or full media validator. Upload access belongs only to the trusted owner. Set rate limits at your proxy for internet deployment.
+![Clip Cabinet viewer with video playback and download](docs/assets/viewer.png)
 
-## Scope and comparison
+[View the mobile layout](docs/assets/mobile.png) · [Read the recording and storage limits](docs/operations.md#run-locally)
 
-This covers local screen recording, optional microphone, playback/download, and self-hosted revocable sharing. It does not offer Loom’s full product: no camera overlay, system audio, editing, transcription, comments, teams, or analytics. No pricing, performance or feature-parity claims are made. Current competitor features/pricing must be verified before expanding the comparison.
+## What this replaces—and what it doesn't
 
-## Validation
+Clip Cabinet targets Loom's **record → preview → share a link** workflow. It is a smaller, self-hosted tool, with no claim of feature parity or affiliation.
+
+| Included | Not included |
+|---|---|
+| Browser screen recording and optional microphone | Camera overlay or system audio |
+| Local preview and download; WebM/MP4 import | Video editing or transcription |
+| Single-owner uploads and revocable viewer links | Team accounts, comments or analytics |
+| Local SQLite/file storage; Docker packaging | Managed hosting or cloud sync |
+| Five-minute recording limit; 100 MB upload cap | Unlimited recording or storage |
+
+**No tracking scripts or third-party video uploads.** Keep owner keys private, use HTTPS for remote recording, and review clips before sharing. [Deployment details and privacy limits →](docs/operations.md)
+
+## Verify the whole workflow
+
+After installing the Python requirements, install test dependencies:
 
 ```sh
 pip install pytest==9.2.0
-python -m pytest -q
 npm ci
 npx playwright install chromium
-# Start an isolated temporary server/library and run browser acceptance:
+python -m pytest -q
 python scripts/check_local.py
 ```
 
-`TEST_URL` overrides localhost; `CHROMIUM_PATH` selects an installed browser. The browser test supplies synthetic screen frames, then uses real MediaRecorder and checks playback, download, upload, anonymous viewer playback, revocation, file import, missing owner key and permission-denial recovery. It creates and deletes a recording on the target server. Seven server tests verify auth, escaped titles, byte ranges, quota concurrency, upload limits, persistence and deletion. Container acceptance is also reproducible:
+The isolated runner generates a temporary owner key and library, starts a loopback server, runs the browser workflow, then cleans up. It does not use your existing recording library.
 
-```sh
-docker build -t clip-cabinet:acceptance .
-CLIP_TEST_BROWSER=1 python3 scripts/docker_acceptance.py
-```
+| Evidence | Status |
+|---|---|
+| Seven server tests | Passed in checkout and extracted package |
+| Real MediaRecorder, download, upload, viewer playback and revoke | Passed with synthetic screen frames |
+| Docker restart, backup and restore | Previously passed; not rerun for this documentation update |
+| Real picker, microphone and hosted HTTPS | Manual checks outstanding |
 
-This creates isolated temporary containers and named volumes, checks non-root UID, auth, upload, byte ranges, restart persistence, revocation, stopped-volume backup/restore and post-restore writes, then runs browser acceptance against the container. It removes only its own test containers/volumes afterward. Container storage checks use a synthetic container-header fixture; real playable video is exercised by the browser suite. The CI workflow runs both suites. Remote CI has not run yet.
+[Validation receipt](artifacts/validation.json) · [Manual acceptance and launch handoff](HANDOFF.md)
 
-Real browser picker, microphone hardware and hosted HTTPS acceptance remain release gates. See `artifacts/validation.json`.
+---
 
-## Distribution
-
-Publish this as its own repository, release package and demo. Demonstrate one complete “record a bug reproduction → share with a maintainer → revoke” workflow using synthetic content. Start with a useful integration tutorial in an owned project’s contributor docs; consider external self-hosting listings only after public installation works and their rules permit it. No external submissions or promotional posts have been made.
-
-## Owner launch handoff
-
-[HANDOFF.md](HANDOFF.md) identifies runnable artifacts, exact manual screen-picker/microphone checks, existing versus freshly run validation, and the prefilled repository form. Publishing source, releases or hosting requires separate product-specific authorization.
+[MIT license](LICENSE) · Your screen. Your file. Your server.
