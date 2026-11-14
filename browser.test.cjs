@@ -3,6 +3,7 @@ const assert=require('node:assert/strict');
 const fs=require('node:fs'),path=require('node:path'),os=require('node:os');
 (async()=>{
  const output=fs.mkdtempSync(path.join(os.tmpdir(),'clip-test-'));
+ const artifacts=process.env.CLIP_ARTIFACT_DIR||path.join(__dirname,'artifacts');fs.mkdirSync(artifacts,{recursive:true});
  const browser=await chromium.launch({headless:true,...(process.env.CHROMIUM_PATH?{executablePath:process.env.CHROMIUM_PATH}:{})});
  try{
   const page=await browser.newPage({viewport:{width:1400,height:1100},acceptDownloads:true});
@@ -36,9 +37,9 @@ const fs=require('node:fs'),path=require('node:path'),os=require('node:os');
   const viewer=await browser.newPage();await viewer.goto(url);
   assert.equal(await viewer.locator('h1').innerText(),'A synthetic walkthrough');
   await viewer.locator('video').evaluate(v=>v.play());await viewer.waitForFunction(()=>document.querySelector('video').currentTime>0);
-  await page.screenshot({path:path.join(__dirname,'artifacts/studio.png'),fullPage:true});
-  await viewer.screenshot({path:path.join(__dirname,'artifacts/viewer.png'),fullPage:true});
-  await page.setViewportSize({width:390,height:844});await page.screenshot({path:path.join(__dirname,'artifacts/mobile.png'),fullPage:true});
+  await page.screenshot({path:path.join(artifacts,'studio.png'),fullPage:true});
+  await viewer.screenshot({path:path.join(artifacts,'viewer.png'),fullPage:true});
+  await page.setViewportSize({width:390,height:844});await page.screenshot({path:path.join(artifacts,'mobile.png'),fullPage:true});
   await page.locator('#library li').filter({has:page.getByRole('link',{name:'A synthetic walkthrough',exact:true})}).getByRole('button',{name:'Revoke & delete',exact:true}).click();
   await page.waitForFunction(()=>![...document.querySelectorAll('#library a')].some(a=>a.textContent==='A synthetic walkthrough'));
   assert.equal((await viewer.goto(url)).status(),404);

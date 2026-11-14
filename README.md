@@ -1,6 +1,6 @@
 # Clip Cabinet
 
-Record a short screen walkthrough, preview it, download it, and optionally share it from your own server. A small, single-owner alternative for the recording-and-link workflow associated with Loom. MIT licensed; no third-party analytics or video storage. This is a local candidate, not a publicly released service.
+Record a short screen walkthrough, preview it, download it, and optionally share it from your own server. An open-source, single-owner alternative to **Loom** for the recording-and-link workflow. MIT licensed; no third-party analytics or video storage. This is a local candidate, not a publicly released service.
 
 ## Run locally
 
@@ -64,8 +64,8 @@ pip install pytest==9.2.0
 python -m pytest -q
 npm ci
 npx playwright install chromium
-# With the server running locally using a dedicated test data directory:
-OWNER_TOKEN="$OWNER_TOKEN" npm test
+# Start an isolated temporary server/library and run browser acceptance:
+python scripts/check_local.py
 ```
 
 `TEST_URL` overrides localhost; `CHROMIUM_PATH` selects an installed browser. The browser test supplies synthetic screen frames, then uses real MediaRecorder and checks playback, download, upload, anonymous viewer playback, revocation, file import, missing owner key and permission-denial recovery. It creates and deletes a recording on the target server. Seven server tests verify auth, escaped titles, byte ranges, quota concurrency, upload limits, persistence and deletion. Container acceptance is also reproducible:
@@ -82,3 +82,7 @@ Real browser picker, microphone hardware and hosted HTTPS acceptance remain rele
 ## Distribution
 
 Publish this as its own repository, release package and demo. Demonstrate one complete “record a bug reproduction → share with a maintainer → revoke” workflow using synthetic content. Start with a useful integration tutorial in an owned project’s contributor docs; consider external self-hosting listings only after public installation works and their rules permit it. No external submissions or promotional posts have been made.
+
+## Owner launch handoff
+
+[HANDOFF.md](HANDOFF.md) identifies runnable artifacts, exact manual screen-picker/microphone checks, existing versus freshly run validation, and the prefilled repository form. Publishing source, releases or hosting requires separate product-specific authorization.
