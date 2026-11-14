@@ -1,0 +1,24 @@
+{
+  "checked_at": "2026-11-14T15:00:31.840039+00:00",
+  "status": "local candidate, not released",
+  "server_tests": 7,
+  "browser_checks": [
+    "synthetic screen through real MediaRecorder",
+    "local playback and download",
+    "authenticated upload",
+    "anonymous link playback",
+    "revoke link and verify 404",
+    "import recording",
+    "missing owner key recovery",
+    "permission denied recovery",
+    "no browser script errors"
+  ],
+  "unverified": [
+    "real screen picker",
+    "microphone hardware",
+    "hosted HTTPS",
+    "Docker run",
+    "public repository and distribution"
+  ],
+  "naming_check": "GitHub repository search for quoted clip-cabinet returned no results on 2026-11-14; not comprehensive name clearance"
+}

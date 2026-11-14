@@ -1,0 +1,32 @@
+name: Checks
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -r requirements.txt pytest==9.2.0
+      - run: python -m pytest -q
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - name: Browser acceptance with synthetic screen
+        env:
+          OWNER_TOKEN: ci-only-token-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+          DATA_DIR: /tmp/clip-cabinet-ci
+        run: |
+          python app.py &
+          server_pid=$!
+          trap 'kill "$server_pid"' EXIT
+          for attempt in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:5120/health; then break; fi
+            sleep 1
+          done
+          npm test
