@@ -33,5 +33,16 @@
     "real MediaRecorder browser suite against container with existing library entries"
   ],
   "container_image_tested": "sha256:7f15947eecf0ce09ccb71445c8db4c51ba89e3002f57b4d7f90cb36b7bdacb9c",
-  "remote_ci": "not run; repository not published"
+  "remote_ci": "not run; repository not published",
+  "handoff_checked_at": "2026-11-14T23:10:35.570059+00:00",
+  "handoff_checks": {
+    "server_tests": 7,
+    "isolated_browser_runner": "passed in existing checkout and extracted source ZIP",
+    "screen_source": "synthetic frames; real MediaRecorder",
+    "real_picker": "not verified",
+    "microphone": "not verified",
+    "hosted_https": "not verified",
+    "container_checks": "historical evidence retained; not rerun this handoff",
+    "publication": "not authorized; no public writes"
+  }
 }
