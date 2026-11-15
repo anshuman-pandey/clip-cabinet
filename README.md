@@ -109,3 +109,9 @@ The isolated runner generates a temporary owner key and library, starts a loopba
 ---
 
 [MIT license](LICENSE) · Your screen. Your file. Your server.
+
+## Interface languages
+
+English · Deutsch · Español · 日本語 · 简体中文 · 繁體中文
+
+The interface follows your browser preferences until you choose a language. Switching keeps your draft and saves your choice locally. Translations are bundled; no translation service or telemetry is used. Your content is never translated. Unknown technical diagnostics fall back to English. See [localization notes](I18N.md) for scope and testing.
