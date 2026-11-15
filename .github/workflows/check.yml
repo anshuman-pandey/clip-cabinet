@@ -22,3 +22,6 @@ jobs:
         env:
           CLIP_TEST_BROWSER: '1'
         run: python3 scripts/docker_acceptance.py
+      - run: node --test i18n.catalog.test.cjs
+      - name: Interface languages (isolated fixtures)
+        run: npm run test:i18n
